@@ -1,7 +1,7 @@
-# 100 Projects Repository 🚀
+# 50 Projects Repository 🚀
 
 ## Overview
-Welcome to my **100 Projects Repository**! This repository is a collection of **100 diverse projects** covering **Blockchain, AI, Web Development, Automation, and more**. The goal is to learn, build, and document various technologies while enhancing problem-solving skills.
+Welcome to my **50 Projects Repository**! This repository is a collection of **100 diverse projects** covering **Blockchain, AI, Web Development, Automation, and more**. The goal is to learn, build, and document various technologies while enhancing problem-solving skills.
 
 ## Project Categories
 - 🔗 **Blockchain**: Smart contracts, DApps, Web3 integrations
@@ -18,7 +18,7 @@ Welcome to my **100 Projects Repository**! This repository is a collection of **
 ## How to Use This Repo
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/yourusername/100-projects](https://github.com/Min-thike-kyaw/100-of-2025).git
+   git clone [https://github.com/yourusername/50-projects](https://github.com/Min-thike-kyaw/50-of-2025).git
    ```
 2. Navigate to a project directory:
    ```bash
@@ -27,7 +27,7 @@ Welcome to my **100 Projects Repository**! This repository is a collection of **
 3. Follow the `README.md` inside each project for setup instructions.
 
 ## Roadmap
-- ✅ Plan and structure 100 projects
+- ✅ Plan and structure 50 projects
 - 🔄 Work on AI and Blockchain-based applications
 - 🔄 Document learnings for each project
 - 🔄 Explore new tech stacks and tools
