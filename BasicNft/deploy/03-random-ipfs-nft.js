@@ -44,6 +44,7 @@ module.exports = async ({getNamedAccounts, deployments}) => {
         tokenUris = await handleTokenUris()
         log("Finishing Token URIS")
     }
+    log(tokenUris)
     const chainId = network.config.chainId
     let vrfCoordinator,subscriptionId,gasLane,callbackGasLimit,mintFee
     if(chainId === 11155111) {
