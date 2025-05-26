@@ -19,7 +19,7 @@ const metadataTemplate = {
 async function handleTokenUris() {
     const tokenUris = []
   
-    const {responses, files} = await storeImages('images')
+    const {responses, files} = await storeImages('images/randomNft')
     for(responseIndex in responses) {
       const metadata = {...metadataTemplate}
       metadata.name = files[responseIndex].replace('.png', "")
