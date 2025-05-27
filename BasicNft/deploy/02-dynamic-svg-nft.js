@@ -4,8 +4,8 @@ const fs = require('fs')
 const { verify } = require("../utils/verify")
 
 
-module.exports = async ({getNamedAccounts , deployment}) => {
-    const {deploy , log} = deployment
+module.exports = async ({getNamedAccounts , deployments}) => {
+    const {deploy , log} = deployments
     const {deployer} = await getNamedAccounts()
 
     const chainId = network.config.chainId
@@ -33,3 +33,5 @@ module.exports = async ({getNamedAccounts , deployment}) => {
         await verify(dynamicSvgNft.address, arguments)
     }
 }
+
+module.exports.tags = ["all", "dynamic-svg-nft", "main"]
