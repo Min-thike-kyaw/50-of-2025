@@ -13,7 +13,8 @@ Welcome to my **50 Projects Repository**! This repository is a collection of **1
 ## Progress Tracker
 | Project No. | Name | Technology | Status |
 |-------------|------|------------|--------|
-| ... | ... | ... | ... |
+| 1 | Basic Nft | Blockchain, NFT | done |
+| 2 | Nft Marketplace | Blockchain, NFT | in progress |
 
 ## How to Use This Repo
 1. Clone the repository:
