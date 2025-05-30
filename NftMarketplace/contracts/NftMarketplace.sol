@@ -2,13 +2,19 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+
 error NftMarketPlace__NotApprovedForMarketPlace();
 error NftMarketPlace__AlreadyListed(address nftAddress,uint256 tokenId);
 error NftMarketPlace__PriceMustBeAboveZero();
 error NftMarketPlace__NotOwner();
 error NftMarketPlace__NotListed(address nftAddress, uint256 tokenId);
 error NftMarketPlace__PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
-contract NftMarketPlace {
+error NftMarketPlace__NoProceeds();
+error NftMarketPlace__TransferFail();
+
+contract NftMarketPlace is ReentrancyGuard {
     struct Listing {
         uint256 price;
         address seller;
@@ -27,6 +33,10 @@ contract NftMarketPlace {
         address indexed nftAddress,
         uint256 indexed tokenId,
         uint256 price
+    );
+    event ItemCancelled(
+        address indexed nftAddress,
+        uint256 indexed tokenId
     );
 
     /**
@@ -87,7 +97,11 @@ contract NftMarketPlace {
     function buyItem(
         address nftAddress,
         uint256 tokenId
-    )  external payable isListed(nftAddress, tokenId) {
+    )  
+        external payable 
+        isListed(nftAddress, tokenId) 
+        nonReentrant()
+    {
         Listing memory listing = s_listings[nftAddress][tokenId];
         if(msg.value < listing.price) {
             revert NftMarketPlace__PriceNotMet(nftAddress, tokenId, msg.value);
@@ -100,5 +114,51 @@ contract NftMarketPlace {
 
         // Emit event
         emit ItemBought(msg.sender, nftAddress, tokenId, listing.price);
+    }
+
+    function cancelListing(
+        address nftAddress,
+        uint256 tokenId
+    ) external isOwner(nftAddress, tokenId, msg.sender) {
+        delete( s_listings[nftAddress][tokenId]);
+        emit ItemCancelled(nftAddress, tokenId);
+    }
+
+    function updateListing(
+        address nftAddress, 
+        uint256 tokenId,
+        uint256 newPrice
+    ) external 
+        isOwner(nftAddress, tokenId, msg.sender)
+        isListed(nftAddress, tokenId)
+    {
+        s_listings[nftAddress][tokenId].price = newPrice;
+        emit ItemListed(msg.sender, nftAddress, tokenId, newPrice);
+    }
+
+    function withdrawProceeds() external  {
+        uint256 proceeds = s_proceeds[msg.sender];
+        if(proceeds <= 0) {
+            revert NftMarketPlace__NoProceeds();
+        }
+        s_proceeds[msg.sender] = 0;
+
+        (bool success, ) = payable(msg.sender).call{value: proceeds}('');
+        if(!success) {
+            revert NftMarketPlace__TransferFail();
+        }
+    }
+
+    /**
+     * 
+     * Getters
+     * 
+     */
+    function getListing(address nftAddress, uint256 tokenId) external view returns(Listing memory) {
+        return s_listings[nftAddress][tokenId];
+    }
+
+    function getProceed(address sender) external view returns(uint256) {
+        return s_proceeds[sender];
     }
 }
