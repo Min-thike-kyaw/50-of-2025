@@ -5,16 +5,16 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 
-error NftMarketPlace__NotApprovedForMarketPlace();
-error NftMarketPlace__AlreadyListed(address nftAddress,uint256 tokenId);
-error NftMarketPlace__PriceMustBeAboveZero();
-error NftMarketPlace__NotOwner();
-error NftMarketPlace__NotListed(address nftAddress, uint256 tokenId);
-error NftMarketPlace__PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
-error NftMarketPlace__NoProceeds();
-error NftMarketPlace__TransferFail();
+error NftMarketplace__NotApprovedForMarketPlace();
+error NftMarketplace__AlreadyListed(address nftAddress,uint256 tokenId);
+error NftMarketplace__PriceMustBeAboveZero();
+error NftMarketplace__NotOwner();
+error NftMarketplace__NotListed(address nftAddress, uint256 tokenId);
+error NftMarketplace__PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
+error NftMarketplace__NoProceeds();
+error NftMarketplace__TransferFail();
 
-contract NftMarketPlace is ReentrancyGuard {
+contract NftMarketplace is ReentrancyGuard {
     struct Listing {
         uint256 price;
         address seller;
@@ -47,7 +47,7 @@ contract NftMarketPlace is ReentrancyGuard {
     modifier notListed(address nftAddress, uint256 tokenId,address sender) {
         Listing memory listing = s_listings[nftAddress][tokenId];
         if(listing.price > 0) {
-            revert NftMarketPlace__AlreadyListed(nftAddress, tokenId);
+            revert NftMarketplace__AlreadyListed(nftAddress, tokenId);
         }
         _;
     }
@@ -56,7 +56,7 @@ contract NftMarketPlace is ReentrancyGuard {
         IERC721 nft = IERC721(nftAddress);
         address owner = nft.ownerOf(tokenId);
         if(owner != spender) {
-            revert NftMarketPlace__NotOwner();
+            revert NftMarketplace__NotOwner();
         }
         _;
     }
@@ -64,7 +64,7 @@ contract NftMarketPlace is ReentrancyGuard {
     modifier isListed(address nftAddress, uint256 tokenId) {
         Listing memory listing = s_listings[nftAddress][tokenId];
         if(listing.price <= 0) {
-            revert NftMarketPlace__NotListed(nftAddress, tokenId);
+            revert NftMarketplace__NotListed(nftAddress, tokenId);
         }
         _;
     }
@@ -84,11 +84,11 @@ contract NftMarketPlace is ReentrancyGuard {
         isOwner(nftAddress, tokenId, msg.sender)
     {
         if(price <= 0) {
-            revert NftMarketPlace__PriceMustBeAboveZero();
+            revert NftMarketplace__PriceMustBeAboveZero();
         }
         IERC721 nft = IERC721(nftAddress);
         if(nft.getApproved(tokenId) != address(this)) {
-            revert NftMarketPlace__NotApprovedForMarketPlace();
+            revert NftMarketplace__NotApprovedForMarketPlace();
         }
         s_listings[nftAddress][tokenId] = Listing(price, msg.sender);
         emit ItemListed(msg.sender, nftAddress, tokenId, price);
@@ -104,11 +104,11 @@ contract NftMarketPlace is ReentrancyGuard {
     {
         Listing memory listing = s_listings[nftAddress][tokenId];
         if(msg.value < listing.price) {
-            revert NftMarketPlace__PriceNotMet(nftAddress, tokenId, msg.value);
+            revert NftMarketplace__PriceNotMet(nftAddress, tokenId, msg.value);
         }
 
         // Sending the money to owner
-        s_proceeds[msg.sender] = s_proceeds[msg.sender] + listing.price;
+        s_proceeds[listing.seller] = s_proceeds[listing.seller] + listing.price;
         delete (s_listings[nftAddress][tokenId]);
         IERC721(nftAddress).safeTransferFrom(listing.seller, msg.sender, tokenId);
 
@@ -139,13 +139,13 @@ contract NftMarketPlace is ReentrancyGuard {
     function withdrawProceeds() external  {
         uint256 proceeds = s_proceeds[msg.sender];
         if(proceeds <= 0) {
-            revert NftMarketPlace__NoProceeds();
+            revert NftMarketplace__NoProceeds();
         }
         s_proceeds[msg.sender] = 0;
 
         (bool success, ) = payable(msg.sender).call{value: proceeds}('');
         if(!success) {
-            revert NftMarketPlace__TransferFail();
+            revert NftMarketplace__TransferFail();
         }
     }
 
