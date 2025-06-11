@@ -12,11 +12,6 @@ const PRICE = ethers.parseEther('0.1')
  * 
  */
 const mintAndList = async () => {
-    console.log(network.name)
-
-    const nftMarketPlaceDeployment = await deployments.get('NftMarketplace')
-    const basicNftDeployment = await deployments.get('BasicNft')
-
     const accounts = await ethers.getSigners()
     const deployer = accounts[0]
     const nftMarketplaceContract = await ethers.getContract('NftMarketplace', deployer)
