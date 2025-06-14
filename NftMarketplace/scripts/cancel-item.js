@@ -1,7 +1,5 @@
 const {ethers } = require('hardhat')
 
-const PRICE = ethers.parseEther('0.1')
-
 /**
  * 
  * so before getting the contract you need to run your node like
@@ -11,24 +9,22 @@ const PRICE = ethers.parseEther('0.1')
  * $ yarn hardhat run scripts/list-and-mint.js --network localhost 
  * 
  */
-const buy = async () => {
+const cancelItem = async () => {
 
-    const TOKEN_ID = 1;
+    const TOKEN_ID = 0;
     const accounts = await ethers.getSigners()
     const deployer = accounts[0]
     const nftMarketplaceContract = await ethers.getContract('NftMarketplace', deployer)
     const basicNftContract = await ethers.getContract('BasicNft', deployer)
     // console.log(basicNftContract)
 
-    console.log("Buying .......")
-    const listing = await nftMarketplaceContract.getListing(basicNftContract.getAddress(), TOKEN_ID)
-    const price = listing.price.toString()
-    const tx = await nftMarketplaceContract.buyItem(basicNftContract.getAddress(), TOKEN_ID, {value: price})
+    console.log("Cancelling .......")
+    const tx = await nftMarketplaceContract.cancelListing(basicNftContract.getAddress(), TOKEN_ID)
     await tx.wait(1)
-    console.log("Nft Bought");
+    console.log("Nft Cancelled");
 }
 
-buy().then(
+cancelItem().then(
     () => process.exit(0)
 ).catch(error => {
     console.log(error)

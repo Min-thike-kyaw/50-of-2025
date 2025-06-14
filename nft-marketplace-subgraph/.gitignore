@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Yarn lock (if using npm)
+package-lock.json
+
+# Build output
+build/
+generated/
+
+# Subgraph CLI outputs
+generated/
+abis/
+
+# TypeScript output (if any)
+dist/
+*.tsbuildinfo
+
+# Logs
+*.log
+
+# Local environment files
+.env
+.env.local
+
+# IDE/Editor folders
+.vscode/
+.idea/
+
+# macOS metadata
+.DS_Store

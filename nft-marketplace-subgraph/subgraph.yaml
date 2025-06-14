@@ -1,0 +1,30 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: NftMarketplace
+    network: localhost
+    source:
+      abi: NftMarketplace
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - ItemBought
+        - ItemCancelled
+        - ItemListed
+      abis:
+        - name: NftMarketplace
+          file: /Users/xtrasure/Documents/missions/50-of-2025/nextjs-nft-marketplace/constants/NftMarketplace.json
+      eventHandlers:
+        - event: ItemBought(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleItemBought
+        - event: ItemCancelled(indexed address,indexed address,indexed uint256)
+          handler: handleItemCancelled
+        - event: ItemListed(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleItemListed
+      file: ./src/nft-marketplace.ts
+  

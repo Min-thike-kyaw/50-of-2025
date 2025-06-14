@@ -2,12 +2,13 @@ const { ethers } = require("ethers")
 const fs = require("fs")
 // require("../constants/NftMarketplace.json")
 const ABI = JSON.parse(fs.readFileSync("./constants/NftMarketplace.json", "utf8"))
+const networkMapping = JSON.parse(fs.readFileSync("./constants/networkMapping.json", "utf8"))
 
 // Connect to Hardhat RPC
 const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545")
 
 // Contract address from your local deployment
-const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+const contractAddress = networkMapping[31337]["NftMarketplace"][0]
 
 const contract = new ethers.Contract(contractAddress, ABI, provider)
 
