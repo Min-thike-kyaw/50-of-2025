@@ -5,9 +5,18 @@ import { useNftMetadata } from '../../../hooks/useNftMetadata'
 import { formatUnits } from 'viem'
 import { middleEllipsis } from '@/lib/utils'
 import Image from 'next/image'
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import Button from './Button'
+import NftMarketplaceAbi from "../../../constants/NftMarketplace.json"
+import networkMapping from "../../../constants/networkMapping.json"
 
 export default function ActiveItems() {
-  const { data, isLoading, error } = useActiveItems()
+  const { isConnected } = useAccount()
+  const { data, isLoading, error } = useActiveItems(isConnected)
+
+  if (!isConnected) {
+    return <div>Please connect your wallet to view active items</div>
+  }
 
   if (isLoading) {
     return <div>Loading active items...</div>
@@ -31,10 +40,31 @@ export default function ActiveItems() {
 }
 
 function NftCard({ item }: { item: ActiveItem }) {
+  const NFTMarketplaceAddress = networkMapping["31337"].NftMarketplace[0]
+  const { address } = useAccount()
+  const isOwner = address?.toLowerCase() === item.seller.toLowerCase()
   const { metadata, isLoading: isLoadingMetadata } = useNftMetadata(
     item.nftAddress,
     item.tokenId
   )
+  const { writeContract, data: hash, error: writeContractError } = useWriteContract()
+  const { isLoading, isSuccess, isError, error } = useWaitForTransactionReceipt({
+    hash,
+  })
+
+  const buyItem = async () => {
+    if(confirm("Are you sure you want to buy this item?")) {
+
+    writeContract({
+      address: NFTMarketplaceAddress as `0x${string}`,
+      abi: NftMarketplaceAbi,
+      functionName: "buyItem",
+      args: [item.nftAddress, item.tokenId],
+      value: BigInt(item.price)
+    })
+    }
+  }
+  console.log(isLoading, isSuccess, isError, error, writeContractError, "isLoading, isSuccess, isError, error, writeContractError")
 
   return (
     <div className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
@@ -68,6 +98,15 @@ function NftCard({ item }: { item: ActiveItem }) {
         {metadata?.name && (
           <p className="text-sm font-medium">{metadata.name}</p>
         )}
+      </div>
+      <div className='flex justify-center mt-4'>
+        {
+          isOwner ? (
+            <Button>
+              Update Price
+            </Button>
+          ) : <Button onClick={() => buyItem()}>Buy</Button>
+        } 
       </div>
     </div>
   )

@@ -21,8 +21,6 @@ export function useNftMetadata(nftAddress: string, tokenId: string) {
     args: [BigInt(tokenId)],
     // enabled: !!nftAddress && !!tokenId,
   })
-  console.log(tokenUri, "tokenUri")
-  console.log(tokenId, "tokenId")
 
   // Then, fetch the metadata from the tokenURI
   const { data: metadata, isLoading, error } = useQuery({

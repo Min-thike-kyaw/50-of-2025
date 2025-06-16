@@ -4,6 +4,7 @@ import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import Providers from "./providers";
 import { headers } from "next/headers";
+import Header from "./components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,12 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers cookie={cookie}>
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+            <Header />
+          </div>
           {children}
+        </main>
         </Providers>
       </body>
     </html>

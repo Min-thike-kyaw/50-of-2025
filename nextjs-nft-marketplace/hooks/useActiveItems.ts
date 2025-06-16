@@ -22,6 +22,8 @@ export type ActiveItem = {
   price: string
 }
 
-export function useActiveItems() {
-  return useGraphQLQuery<{ activeItems: ActiveItem[] }>(GET_ACTIVE_ITEMS)
+export function useActiveItems(enabled: boolean = true) {
+  return useGraphQLQuery<{ activeItems: ActiveItem[] }>(GET_ACTIVE_ITEMS, undefined, {
+    enabled
+  })
 } 

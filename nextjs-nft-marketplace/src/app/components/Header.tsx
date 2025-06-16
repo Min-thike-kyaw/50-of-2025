@@ -8,8 +8,10 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
 import { emojiAvatarForAddress } from "@/lib/emojiAvatarForAddress";
+import { middleEllipsis } from "@/lib/utils";
+import Link from "next/link";
 
-export default function ConnectButton() {
+export default function Header() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const { isConnecting, address, isConnected, chain } = useAccount();
   const { color: backgroundColor, emoji } = emojiAvatarForAddress(
@@ -63,7 +65,15 @@ export default function ConnectButton() {
 
   return (
     <div className="max-w-5xl w-full flex items-center justify-between">
-      <div
+      <Link href="/">Home</Link>
+      <div className="flex px-4 py-2 gap-x-10 items-center">
+        <div>
+          <Link href="/sell-nft">Sell Nft</Link>
+        </div>
+        {/* <button className="btn" onClick={openChainModal}>
+          Switch Networks
+        </button> */}
+        <div
         className="flex justify-center items-center px-4 py-2 border border-neutral-700 bg-neutral-800/30 rounded-xl font-mono font-bold gap-x-2 cursor-pointer"
         onClick={async () => openAccountModal?.()}
       >
@@ -78,11 +88,9 @@ export default function ConnectButton() {
         >
           {emoji}
         </div>
-        <p>Account</p>
+        <p>{middleEllipsis(address as string, 8) || ""}</p>
       </div>
-      <button className="btn" onClick={openChainModal}>
-        Switch Networks
-      </button>
+      </div>
     </div>
   );
 };
