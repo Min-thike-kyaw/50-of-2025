@@ -1,12 +1,11 @@
-import Image from "next/image";
-import Header from "./components/Header";
-import Profile from "./components/Profile";
 import ActiveItems from "./components/ActiveItems";
+import Proceed from "./components/Proceed";
 
 export default function Home() {
   return (
-    <div>
+    <div className="max-w-5xl w-full">
       <ActiveItems />
+      <Proceed />
     </div>
   );
 }

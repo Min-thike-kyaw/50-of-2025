@@ -1,9 +1,10 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi"
 import NftMarketplaceAbi from "../../../constants/NftMarketplace.json"
 import Button from "./Button"
 import networkMapping from "../../../constants/networkMapping.json"
+import toast from "react-hot-toast"
 
 export default function SellNftForm() {
   const { writeContract, data: hash, error: writeContractError } = useWriteContract()
@@ -41,21 +42,15 @@ export default function SellNftForm() {
     }
   }
 
-	console.log(isLoading, isSuccess, isError, error, writeContractError, "isLoading, isSuccess, isError, error, writeContractError")
 
-  // Log transaction status
-  if (isLoading) {
-    console.log('Transaction is loading...')
-  }
-  if (isSuccess) {
-    console.log('Transaction successful! Hash:', hash)
-  }
-  if (isError) {
-    console.error('Transaction failed:', error)
-  }
+  useEffect(()=> {
+    if(isSuccess) {
+      toast.success("NFT listed successfully")
+    }
+  }, [isSuccess])
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <div className="mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Sell NFT</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -68,7 +63,7 @@ export default function SellNftForm() {
             name="nftAddress"
             value={form.nftAddress}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             required
           />
         </div>
@@ -82,7 +77,7 @@ export default function SellNftForm() {
             name="tokenId"
             value={form.tokenId}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
           />
         </div>
@@ -96,7 +91,7 @@ export default function SellNftForm() {
             name="price"
             value={form.price}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 h-8 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
           />
         </div>

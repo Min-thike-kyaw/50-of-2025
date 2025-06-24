@@ -1,4 +1,4 @@
-import { useContractRead } from 'wagmi'
+import { useContractRead, useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
 import BasicNftAbi from '../constants/BasicNft.json'
 
@@ -14,7 +14,7 @@ export type NftMetadata = {
 
 export function useNftMetadata(nftAddress: string, tokenId: string) {
   // First, get the tokenURI from the contract
-  const { data: tokenUri } = useContractRead({
+  const { data: tokenUri } = useReadContract({
     address: nftAddress as `0x${string}`,
     abi: BasicNftAbi,
     functionName: 'tokenURI',

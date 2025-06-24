@@ -64,11 +64,11 @@ export default function Header() {
   }
 
   return (
-    <div className="max-w-5xl w-full flex items-center justify-between">
-      <Link href="/">Home</Link>
+    <div className="w-full flex items-center justify-between">
+      <Link href="/" className="text-2xl font-bold">Home</Link>
       <div className="flex px-4 py-2 gap-x-10 items-center">
         <div>
-          <Link href="/sell-nft">Sell Nft</Link>
+          <Link href="/sell-nft" className="text-xl font-bold">Sell NFT</Link>
         </div>
         {/* <button className="btn" onClick={openChainModal}>
           Switch Networks
