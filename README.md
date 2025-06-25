@@ -1,7 +1,7 @@
 # 50 Projects Repository 🚀
 
 ## Overview
-Welcome to my **50 Projects Repository**! This repository is a collection of **100 diverse projects** covering **Blockchain, AI, Web Development, Automation, and more**. The goal is to learn, build, and document various technologies while enhancing problem-solving skills.
+Welcome to my **50 Projects Repository**! This repository is a collection of **50 diverse projects** covering **Blockchain, AI, Web Development, Automation, and more**. The goal is to learn, build, and document various technologies while enhancing problem-solving skills.
 
 ## Project Categories
 - 🔗 **Blockchain**: Smart contracts, DApps, Web3 integrations
@@ -13,13 +13,13 @@ Welcome to my **50 Projects Repository**! This repository is a collection of **1
 ## Progress Tracker
 | Project No. | Name | Technology | Status |
 |-------------|------|------------|--------|
-| 1 | Basic Nft | Blockchain, NFT | done |
-| 2 | Nft Marketplace | Blockchain, NFT | in progress |
+| 1 | Basic Nft | Blockchain, NFT | ✅ |
+| 2 | Nft Marketplace | Blockchain, NFT | ✅ |
 
 ## How to Use This Repo
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/yourusername/50-projects](https://github.com/Min-thike-kyaw/50-of-2025).git
+   git clone [[https://github.com/yourusername/50-projects](https://github.com/Min-thike-kyaw/50-of-2025).git](https://github.com/Min-thike-kyaw/50-of-2025)
    ```
 2. Navigate to a project directory:
    ```bash
