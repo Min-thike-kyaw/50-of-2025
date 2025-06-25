@@ -1,0 +1,29 @@
+# Ignore persistent data directories
+/data/
+
+# Ignore Docker Compose override files
+*override*.yml
+
+# Ignore editor swap/backup files
+*~
+*.swp
+
+# Ignore log files
+*.log
+
+# Ignore environment files
+.env
+
+# Do not ignore configuration, scripts, or Dockerfiles
+!docker-compose.yml
+!Dockerfile
+!cloudbuild.yaml
+!README.md
+!bin/
+!build.sh
+!setup.sh
+!start
+!tag.sh
+!wait_for
+!old.yml
+!docker-compose.yml-e 
