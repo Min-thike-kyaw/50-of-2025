@@ -19,7 +19,7 @@ Welcome to my **50 Projects Repository**! This repository is a collection of **5
 ## How to Use This Repo
 1. Clone the repository:
    ```bash
-   git clone [[https://github.com/yourusername/50-projects](https://github.com/Min-thike-kyaw/50-of-2025).git](https://github.com/Min-thike-kyaw/50-of-2025)
+   git clone [https://github.com/Min-thike-kyaw/50-of-2025](https://github.com/Min-thike-kyaw/50-of-2025)
    ```
 2. Navigate to a project directory:
    ```bash
