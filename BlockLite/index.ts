@@ -1,5 +1,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
+import { MerkleTree } from 'merkletreejs';
+import keccak256 from 'keccak256';
 
 console.log('Simple Blockchain Implementation in TypeScript');
 type TransactionType = {
@@ -13,6 +15,7 @@ type BlockType = {
     prevHash: string;
     hash: string;
     timestamp: number;
+    merkleRoot: string;
     transactions: TransactionType[];
     nonce: number;
 }
@@ -23,12 +26,13 @@ const MemPool: TransactionType[] = [];
 const Balances: { [key: string]: number } = {};
 const Nonces: { [key: string]: number } = {};
 
-const createBlock = (index: number, prevHash: string, hash: string,timestamp: number, transactions: TransactionType[], nonce: number): BlockType => {
+const createBlock = (index: number, prevHash: string, hash: string,timestamp: number, merkleRoot: string,transactions: TransactionType[], nonce: number): BlockType => {
     return {
         index,
         prevHash,
         timestamp,
         hash,
+        merkleRoot,
         transactions,
         nonce
     };
@@ -67,14 +71,20 @@ const mineBlock = (transactions : TransactionType[]): void => {
         }
     }
     const { nonce, hash } = findNonce(length, prevHash, timestamp, validTransactions) // Simple nonce for demonstration
-
-    const newBlock = createBlock(length, prevHash, hash, timestamp,validTransactions, nonce);
+    const merkleTree = new MerkleTree(validTransactions.map(tx => makeHash(JSON.stringify(tx))), makeHash, { sortPairs: true });
+    const merkleRoot = merkleTree.getRoot().toString('hex');
+    const newBlock = createBlock(length, prevHash, hash, timestamp, merkleRoot, validTransactions, nonce);
     BlockChain.push(newBlock);
 }
 
 const calculateHash = (index: number, prevHash: string, timestamp: number, transactions: TransactionType[], nonce: number): string => {
     const formattedData = JSON.stringify(transactions);
-    return crypto.createHash('sha256').update(`${index}${prevHash}${timestamp}${formattedData}${nonce}`).digest('hex');
+    return makeHash(`${index}${prevHash}${timestamp}${formattedData}${nonce}`);
+}
+
+const makeHash = (data: string): string => {
+    // return crypto.createHash('sha256').update(data).digest('hex');
+    return keccak256(data).toString('hex');
 }
 
 const addBalance = (from: string, amount: number) => {
