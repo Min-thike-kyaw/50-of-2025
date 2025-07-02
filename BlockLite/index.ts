@@ -1,4 +1,3 @@
-import * as crypto from 'crypto';
 import * as fs from 'fs';
 import { MerkleTree } from 'merkletreejs';
 import keccak256 from 'keccak256';
