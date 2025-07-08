@@ -111,9 +111,6 @@ class Blockchain {
 
     addBlock(block: BlockType): boolean {
         const lastBlock = this.getLatestBlock();
-        console.log(lastBlock)
-        console.log(block)
-        console.log("failed")
         if(block.transactions.length === 0) return false;
         if(block.prevHash !== lastBlock.hash ) return false;
         if(block.index !== lastBlock.index + 1) return false;
@@ -134,6 +131,61 @@ class Blockchain {
         
         return true;
     }
+
+    replaceChain(newBlocks: BlockType[]): boolean {
+        const currentChain = this.chain;
+      
+        // Check if incoming chain is longer
+        if (newBlocks.length <= currentChain.length) {
+          console.log("Received chain is not longer than current chain. Ignoring.");
+          return false;
+        }
+      
+        // Validate the incoming chain
+        if (!this.isValidChain(newBlocks)) {
+          console.log("Received chain is invalid. Ignoring.");
+          return false;
+        }
+      
+        console.log("Replacing current chain with new chain.");
+        this.chain = newBlocks;
+        return true;
+    }
+
+    private isValidChain(chain: BlockType[]): boolean {
+        const genesis = this.getGenesisBlock(); // fixed genesis
+
+        const receivedGenesis = chain[0];
+        if (
+            receivedGenesis.index !== genesis.index ||
+            receivedGenesis.prevHash !== genesis.prevHash ||
+            receivedGenesis.merkleRoot !== genesis.merkleRoot ||
+            receivedGenesis.hash !== genesis.hash
+        ) {
+            console.log("Genesis block does not match.");
+            return false;
+        }
+
+      
+        for (let i = 1; i < chain.length; i++) {
+          const current = chain[i];
+          const prev = chain[i - 1];
+      
+          // Check if the block is properly linked
+          if (current.prevHash !== prev.hash) return false;
+      
+          // Recalculate hash and merkle root
+          const expectedHash = calculateHash(current.index, current.prevHash, current.timestamp, current.transactions, current.nonce);
+          if (current.hash !== expectedHash) return false;
+      
+          const expectedMerkle = calculateMerkleRoot(current.transactions);
+          if (current.merkleRoot !== expectedMerkle) return false;
+        }
+      
+        return true;
+      }
+      
+      
 
     handleTransactions(transactions: TransactionType[]) {
         for (const tx of transactions) {
@@ -157,6 +209,10 @@ class Blockchain {
         this.balances[from] = (this.balances[from] + 0) ||  amount;
     }
 
+    getGenesisBlock(): BlockType {
+        return this.chain[0];
+    }
+
     getBalance = (from: string) => {
         return this.balances[from] || 0;
     }
@@ -167,6 +223,10 @@ class Blockchain {
 
     getLatestBlock(): BlockType {
         return this.chain[this.chain.length - 1];
+    }
+
+    getFullChain(): BlockType[] {
+        return this.chain;
     }
 
     getNonce (from: string): number {

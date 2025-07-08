@@ -1,17 +1,20 @@
 import Blockchain from "./Blockchain";
+import Network from "./Network";
 import { BlockType, TransactionType } from "./type";
 import { calculateHash, makeHash, serializeTransaction, sleep } from "./utils";
 import { MerkleTree } from 'merkletreejs';
 
 class Miner {
     private blockchain : Blockchain;
+    private network: Network;
     private minerAddress : string;
     private isMining: boolean = false;
     private currentDifficulty : number = 2;
     private maxAttempt : number = 10000;
-    constructor(blockchain: Blockchain, minerAddress: string) {
+    constructor(blockchain: Blockchain, minerAddress: string, network: Network) {
         this.blockchain = blockchain;
         this.minerAddress = minerAddress;
+        this.network = network;
     }
 
     public async startMining() {
@@ -50,7 +53,6 @@ class Miner {
         
         // Merkle Root
         const merkleRoot = this.calculateMerkleRoot(pendingTransactions)
-        console.log("heyy merkleRoot")
         // Preparing Block
         const newBlock = this.blockchain.createBlock(index, prevHash, hash, timestamp, merkleRoot, pendingTransactions, nonce, this.currentDifficulty)
         
@@ -59,6 +61,8 @@ class Miner {
             console.error(`Failed to add block: ${JSON.stringify(newBlock)}`);
             return null;
         }
+
+        this.network.broadBlock(newBlock);
         
         return newBlock;
     }

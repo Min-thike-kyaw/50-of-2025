@@ -1,0 +1,9 @@
+const MessageType = {
+    NEW_TRANSACTION: 'NEW_TRANSACTION',
+    NEW_BLOCK: 'NEW_BLOCK',
+    QUERY_LATEST: 'QUERY_LATEST',
+    RESPONSE_BLOCKCHAIN: 'RESPONSE_BLOCKCHAIN',
+    QUERY_ALL: 'QUERY_ALL',
+}
+
+export default MessageType
