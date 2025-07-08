@@ -1,4 +1,4 @@
-# Cu# Custom Blockchain Implementation
+# Custom Blockchain Implementation
 
 A simple yet functional blockchain prototype built from scratch to understand and demonstrate core blockchain concepts like blocks, transactions, wallets, mining, and consensus.
 
