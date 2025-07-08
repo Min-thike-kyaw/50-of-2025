@@ -2,9 +2,12 @@ import Blockchain from "./Blockchain";
 import WebSocket, { WebSocketServer } from 'ws';
 import MessageType from "./constants/MessageType";
 import { BlockType, TransactionType } from "./type";
+import fs from 'fs'
 
 
 const PORT = process.env.PEER_PORT || 6001;
+const peers = process.env.PEERS ? process.env.PEERS.split(',') : []; // e.g., ws://localhost:6002,ws://localhost:6003
+
 class Network {
     private blockchain: Blockchain;
     private sockets: WebSocket[] = [];
@@ -14,7 +17,7 @@ class Network {
     constructor(blockchain: Blockchain) {
         this.blockchain = blockchain;
         this.server = new WebSocketServer({ port: Number(PORT) });
-        this.peers = [];
+        this.peers = peers;
         // Private constructor to prevent instantiation
     }
 
@@ -52,6 +55,15 @@ class Network {
 
     private handleMessage(ws: WebSocket, data: string): void {
         const message = JSON.parse(data);
+        
+        fs.appendFile(`logs.txt`, `PORT:${process.env.PEER_PORT} Received message: ${data}\n`, (err) => {
+            if (err) {
+                console.error('Error writing to log file:', err);
+            }
+        })
+
+        console.log(message)
+
         switch (message.type) {
             case MessageType.QUERY_LATEST:
                 this.send(ws, this.responseLatest());
@@ -63,15 +75,18 @@ class Network {
                 this.handleBlockchainResponse(message.data);
                 break;
             case MessageType.NEW_TRANSACTION:
-                if(this.blockchain.createTransaction(message.data)){
-                    this.broadcastTransaction(message.data);
-                }
+                console.log("Received new transaction:", message.data);
+                this.blockchain.createTransaction(message.data)
                 break;
             case MessageType.NEW_BLOCK:
-                if(this.blockchain.addBlock(message.data)) {
-                    console.log('New block added:', message.data);
-                    // this.broadBlock(message.data);
-                }
+                // Validate and add the new block to the blockchain
+                const added = this.blockchain.addBlock(message.data)
+                if (!added) {
+                    console.log("Couldn't add block, requesting full chain...");
+                    this.send(ws, this.queryAll());
+                } else {
+                    console.log("New block added successfully.");
+                }            
                 break;
             default:
                 console.error('Unknown message type:', message.type);
@@ -97,6 +112,7 @@ class Network {
     } 
 
     broadcastTransaction(data: TransactionType) {
+        console.log("Broadcasting transaction:", data);
         this.broadcast({
             type: MessageType.NEW_TRANSACTION,
             data

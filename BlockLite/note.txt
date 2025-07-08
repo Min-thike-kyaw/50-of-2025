@@ -1,0 +1,2 @@
+PEER_PORT=6001 npx tsx index.ts
+PEER_PORT=6002 PEERS=ws://localhost:6001 npx tsx index.ts

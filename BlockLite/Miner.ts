@@ -11,6 +11,7 @@ class Miner {
     private isMining: boolean = false;
     private currentDifficulty : number = 2;
     private maxAttempt : number = 10000;
+    private miningReward: number = 50; // Coinbase reward
     constructor(blockchain: Blockchain, minerAddress: string, network: Network) {
         this.blockchain = blockchain;
         this.minerAddress = minerAddress;
@@ -47,6 +48,9 @@ class Miner {
         const index = lastBlock.index + 1;
         const prevHash = lastBlock.hash;
         const timestamp = Date.now();
+
+        const rewardTx = this.createCoinbaseTransaction();
+        pendingTransactions.unshift(rewardTx);
 
         // Finding nonce
         const { nonce, hash } = this.proofOfWork(index, prevHash, timestamp, pendingTransactions)
@@ -87,6 +91,17 @@ class Miner {
         this.maxAttempt = 10000; // Reset max attempts after failure
         throw new Error('Nonce not found within max attempts Or Interrupted');
     }
+
+    private createCoinbaseTransaction(): TransactionType {
+        return {
+            from: '0', 
+            to: this.minerAddress,
+            amount: this.miningReward,
+            nonce: -1, 
+            signature: '' 
+        };
+    }
+
 
     private calculateMerkleRoot(transactions : TransactionType[]): string {
         const leaves = transactions.map(tx => makeHash(serializeTransaction(tx)))

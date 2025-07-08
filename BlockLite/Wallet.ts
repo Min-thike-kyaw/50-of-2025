@@ -20,11 +20,15 @@ class Wallet {
         return {...transaction, signature};
     }
 
-    sendTransaction (to: string, amount: number, blockchain: Blockchain, network: Network): TransactionType {
+    sendTransaction (to: string, amount: number, blockchain: Blockchain, network: Network): TransactionType|null {
         const nonce = blockchain.getNonce(this.getAddress());
 
         const trx = this.signTransaction({from: this.getAddress(), to, amount, nonce});
         const tx = blockchain.createTransaction(trx);
+        if (!tx) {
+            console.error('Transaction creation failed');
+            return null;
+        }
         network.broadcastTransaction(tx);
         return tx;
     }
