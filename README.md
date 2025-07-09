@@ -14,7 +14,7 @@ Welcome to my **50 Projects Repository**! This repository is a collection of **5
 | Project No. | Name | Technology | Status |
 |-------------|------|------------|--------|
 | 1 | Basic Nft | Blockchain, NFT | ✅ |
-| 2 | Nft Marketplace | Blockchain, NFT | ✅ |
+| 2 | Nft Marketplace | Blockchain, NFT, DApp | ✅ |
 | 3 | BlockLite (Custom Blockchain) | Blockchain | ✅ |
 | 4 | P2PMessaging | Web Development | 🔄 |
 
