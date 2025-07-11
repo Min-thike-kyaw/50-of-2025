@@ -1,0 +1,14 @@
+Alice (Caller)              Bob (Receiver)
+---------------             ----------------
+Create PeerConn             Create PeerConn
+Create Offer   ─────────▶   Set Remote Description
+Set Local Description        Create Answer
+                             Set Local Description
+←───────────────  Send Answer to Alice
+Set Remote Description
+
+Gather ICE Candidates  ⇄  Exchange Candidates
+
+✔️ Peer Connection Established
+✔️ DataChannel Open
+⇄ Messages sent P2P
