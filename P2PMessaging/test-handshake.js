@@ -1,5 +1,6 @@
 const configurationTest = {
-    'iceServers': []
+    'iceServers': [],
+    iceTransportPolicy: "all"
 }
 const pc1 = new RTCPeerConnection(configurationTest);
 const pc2 = new RTCPeerConnection(configurationTest);
@@ -29,11 +30,11 @@ pc2.ondatachannel = (event) => {
 };
 
 // Debug states
-[pc1, pc2].forEach((pc, i) => {
-    pc.oniceconnectionstatechange = () => 
-        console.log(`PC${i+1} ICE state:`, pc.iceConnectionState);
-    pc.onconnectionstatechange = () => 
-        console.log(`PC${i+1} Connection state:`, pc.connectionState);
+[pc1, pc2].forEach((peerC, i) => {
+    peerC.oniceconnectionstatechange = () => 
+        console.log(`PC${i+1} ICE state:`, peerC.iceConnectionState);
+    peerC.onconnectionstatechange = () => 
+        console.log(`PC${i+1} Connection state:`, peerC.connectionState);
 });
 
 // Modified call function
