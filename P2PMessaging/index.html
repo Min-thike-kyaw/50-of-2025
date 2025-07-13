@@ -9,13 +9,21 @@
     <h1>P2P Messaging</h1>
 
     <p>This is a simple P2P messaging application using WebRTC and WebSockets.</p>
-    <input type="text" id="message-input">
-    <button id="offer">Offer</button>
-    <button id="send-message">Send Message</button>
-    <!-- <button id="answer">Answer</button>
-    <button id="set-remote">Set Remote</button>
-    <button id="add-ice-candidate">Add Ice Candidate</button> -->
-    <button id="test-handshake">Test Handshake</button>
+    <div>
+        <input type="text" id="message-input">
+        <button id="offer">Offer</button>
+        <button id="send-message">Send Message</button>
+        <!-- <button id="answer">Answer</button>
+        <button id="set-remote">Set Remote</button>
+        <button id="add-ice-candidate">Add Ice Candidate</button> -->
+        <button id="test-handshake">Test Handshake</button>
+        <button id="connect-media">Connect Media</button>
+    </div>
+    <div>
+        Here is your video
+        <video id="your-video" autoplay playsinline>
+        </video>
+    </div>
 
     
 </body>

@@ -22,6 +22,9 @@ document.getElementById('send-message').onclick = function() {
 //     const parsedValue = JSON.parse(candidateInput.value);
 //     await addIceCandidate(parsedValue);
 // }
-document.getElementById('test-handshake').onclick = async function() {
-    await call();
+// document.getElementById('test-handshake').onclick = async function() {
+//     await call();
+// }
+document.getElementById('connect-media').onclick = async function() {
+    await connectMedia();
 }

@@ -13,7 +13,6 @@ wss.on('connection', (ws) => {
         console.log(`Server Received message: ${message}`);
         // Broadcast the message to all connected clients
         clients.forEach(client => {
-            console.log(`Sending message to client: ${client.readyState}`);
             if (client !== ws && client.readyState === 1) {
                 client.send(message);
             }

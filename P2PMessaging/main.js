@@ -1,6 +1,7 @@
 const configuration = {
     'iceServers': []
 }
+const yourVideo = document.querySelector('video');
 
 /**
  * 
@@ -22,6 +23,7 @@ const ws = new WebSocket(SIGNALING_SERVER_URL);
 let pc = new RTCPeerConnection(configuration);
 const dataChannel = pc.createDataChannel("chat");
 
+/** Web Socket */
 
 ws.addEventListener('message', async (event) => {
     const textMessage = await event.data.text();
@@ -46,6 +48,8 @@ const send = (data, type) => {
     })
     ws.send(message)
 }
+
+/** P2P */
 pc.ondatachannel = (event) => {
     const receivedChannel = event.channel;
     receivedChannel.onopen = () => {
@@ -126,5 +130,25 @@ const sendMessage = (message) => {
         console.log("Message sent:", message);
     } else {
         console.error("Data channel is not open. Cannot send message.");
+    }
+}
+
+/** Media */
+
+const connectMedia = async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video : true,
+            audio: true
+        });
+        const videoTrack = stream.getVideoTracks();
+        const audioTrack = stream.getAudioTracks();
+        console.log(`Heyyyy`)
+        yourVideo.srcObject = stream;
+    } catch (error) {
+        if(error.name === 'NotAllowedError') {
+            console.error("Permission to access media devices was denied.");
+        }
+        console.error("Error accessing media devices:", error);
     }
 }
