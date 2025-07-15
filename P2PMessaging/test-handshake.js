@@ -38,7 +38,7 @@ pc2.ondatachannel = (event) => {
 });
 
 // Modified call function
-const call = async () => {
+const callTest = async () => {
     console.log("Starting call...");
     
     // 1. PC1 creates offer

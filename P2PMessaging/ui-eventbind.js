@@ -1,6 +1,6 @@
-document.getElementById('offer').onclick = async function() {
-    await createOffer();
-}
+// document.getElementById('offer').onclick = async function() {
+//     await createOffer();
+// }
 // document.getElementById('answer').onclick = async function() {
 //     const sdpInput = document.getElementById('sdp-input');
 //     const parsedValue = JSON.parse(sdpInput.value);
@@ -25,6 +25,6 @@ document.getElementById('send-message').onclick = function() {
 // document.getElementById('test-handshake').onclick = async function() {
 //     await call();
 // }
-document.getElementById('connect-media').onclick = async function() {
-    await connectMedia();
+document.getElementById('call').onclick = async function() {
+    await call();
 }

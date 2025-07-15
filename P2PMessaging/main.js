@@ -1,7 +1,8 @@
 const configuration = {
     'iceServers': []
 }
-const yourVideo = document.querySelector('video');
+const localVideo = document.querySelector('video#local');
+const remoteVideo = document.querySelector('video#remote');
 
 /**
  * 
@@ -49,6 +50,8 @@ const send = (data, type) => {
     ws.send(message)
 }
 
+/** Data Channel */
+
 /** P2P */
 pc.ondatachannel = (event) => {
     const receivedChannel = event.channel;
@@ -75,6 +78,16 @@ pc.oniceconnectionstatechange = () => {
 pc.onconnectionstatechange = () => {
     console.log("PeerConnection State:", pc.connectionState);
 };
+
+pc.ontrack = (event) => {
+    console.log("Track received:", event.track);
+    if (event.streams && event.streams.length > 0) {
+        remoteVideo.srcObject = event.streams[0];
+        console.log("Remote video stream set:", event.streams[0]);
+    } else {
+        console.warn("No streams found in the received track.");
+    }
+}
 
 const createOffer = async () => {
     try {
@@ -118,7 +131,15 @@ const addIceCandidate = async (candidate) => {
 }
 
 const acceptAndAnswer = async (answer) => {
+    // 1. Set Remote Description
     await pc.setRemoteDescription(answer);
+    
+    // 2. Get local media
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+    localVideo.srcObject = stream
+
+    // 3. Create and send answer
     const result = await createAnswer();
     send(result, MESSAGE_TYPE.ANSWER);
 }
@@ -135,16 +156,20 @@ const sendMessage = (message) => {
 
 /** Media */
 
-const connectMedia = async () => {
+const call = async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             video : true,
             audio: true
         });
-        const videoTrack = stream.getVideoTracks();
-        const audioTrack = stream.getAudioTracks();
-        console.log(`Heyyyy`)
-        yourVideo.srcObject = stream;
+        
+        localVideo.srcObject = stream;
+
+        stream.getTracks().forEach(track => {
+            console.log("Adding track to PeerConnection:", track);
+            pc.addTrack(track, stream);
+        })
+        createOffer();
     } catch (error) {
         if(error.name === 'NotAllowedError') {
             console.error("Permission to access media devices was denied.");

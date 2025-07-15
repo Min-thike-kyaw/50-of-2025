@@ -1,1 +1,2 @@
 chrome://flags/#enable-webrtc-hide-local-ips-with-mdns → Disabled
+connect Media -> offer 
