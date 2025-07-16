@@ -1,8 +1,14 @@
 const ws = require('ws');
+const express = require('express');
+const http = require('http');
 
+
+const app = express();
+const server = http.createServer(app);
 const wss = new ws.Server({ port: 3001 });
 
-// let clients = []
+app.use(express.static('public'));
+
 const clients = new Map();
 console.log("WebSocket server started on ws://localhost:3001");
 wss.on('connection', (ws) => {
@@ -53,3 +59,5 @@ const broadcastPeerList = () => {
 const generateId = () => {
     return Math.random().toString(36).substring(2, 9);
 }
+
+server.listen(3000, () => console.log('Server running on http://localhost:3000'));
