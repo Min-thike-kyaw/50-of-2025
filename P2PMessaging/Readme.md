@@ -16,6 +16,7 @@ A simple multi-peer video conferencing app built using **WebRTC** and **WebSocke
 ```bash
 cd /path/to/directory
 node server.js
+```
 
 ## 📝 Future Features (if I revisit)
 These are possible extensions to the app if I decide to work on it again:
