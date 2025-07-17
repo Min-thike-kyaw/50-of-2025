@@ -189,20 +189,6 @@ function renderPeerList() {
   });
 }
 
-// const acceptAndAnswer = async (answer) => {
-//     // 1. Set Remote Description
-//     await pc.setRemoteDescription(answer);
-
-//     // 2. Get local media
-//     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-//     stream.getTracks().forEach(track => pc.addTrack(track, stream));
-//     localVideo.srcObject = stream
-
-//     // 3. Create and send answer
-//     const result = await createAnswer();
-//     send(result, MESSAGE_TYPE.ANSWER);
-// }
-
 const handleOffer = async (senderId, offer) => {
   if (connectedPeers.has(senderId)) {
     console.warn(`Already connected to ${senderId}`);
